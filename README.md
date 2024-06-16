@@ -1,3 +1,6 @@
+# Demo of how to use Aspire.net, Specflow and Playwright for end-to-end testing web components frontend and .NET api
+
+
 ## Install PlayWright browsers
 
 After dotnet restore you should install the browsers using this command:
