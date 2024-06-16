@@ -1,0 +1,16 @@
+/node_modules/
+/lib/
+/test/
+custom-elements.json
+# top level source
+dist/
+# only generated for size check
+*.bundled.js
+
+#Docs
+/docs/_site/
+/docs/build/
+/docs/node_modules/
+*.pyc
+
+.DS_Store
