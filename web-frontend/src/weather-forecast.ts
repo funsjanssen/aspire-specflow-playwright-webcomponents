@@ -1,6 +1,5 @@
 import {LitElement, html, css} from 'lit';
-import {customElement} from 'lit/decorators.js';
-
+import {customElement, property} from 'lit/decorators.js';
 import { max, sort, scaleLinear, create, select, scaleBand, axisTop, axisLeft } from 'd3';
 import {provide} from "@lit/context";
 import {weatherContext, WeatherService} from "./weather.service";
@@ -18,6 +17,9 @@ export class WeatherForecast extends LitElement {
 
     @provide({context: weatherContext})
     weatherService: WeatherService = new WeatherService();
+    
+    @property({ type: Boolean })
+    isLoading: boolean = false;
 
     private _weatherTask = new Task(this, {
         task: async ([], {signal}) => {
@@ -31,13 +33,21 @@ export class WeatherForecast extends LitElement {
     });
 
     override render() {
-        return this._weatherTask.render({
-            pending: () => html`<p>Loading weather</p>`,
-            complete: (weather) => html`
+        if (this.isLoading) {
+            return this._weatherTask.render({
+                pending: () => html`<p>Loading weather</p>`,
+                complete: (weather) => html`
                 ${this.getChart(weather)}
             `,
-            error: (e) => html`<p>Error: ${e}</p>`
-        });
+                error: (e) => html`<p>Error: ${e}</p>`
+            });
+        } else {
+            return html`<button data-testid="load-button" @click="${this._loadClick}">Load forecast</button>`
+        }
+    }
+
+    _loadClick(_: any) {
+        this.isLoading = true
     }
 
     private getChart(forecast: Weather[]) {

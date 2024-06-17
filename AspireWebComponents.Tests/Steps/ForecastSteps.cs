@@ -6,23 +6,25 @@ using TechTalk.SpecFlow;
 namespace AspireWebComponents.Tests;
 
 [Binding]
-public class ForecastSteps(Hook hooks, ForecastPage forecastPage)
+public class ForecastSteps(ForecastPage forecastPage)
 {
-    private readonly IPage _user = hooks.User;
-    
-    private readonly string _webFrontendUri = hooks.WebFrontendUri;
-    
     private readonly ForecastPage _forecastPage = forecastPage;
+
+    [Given(@"the forecast page is shown")]
+    public async Task GivenTheForecastPageIsShown()
+    {
+        await _forecastPage.GoToPageAsync();
+    }
+    
+    [When(@"the load forecast button is pressed")]
+    public async Task WhenTheLoadForecastButtonIsPressed()
+    {
+        await _forecastPage.ClickLoadButtonAsync();
+    }
 
     [Then(@"the page shows a bar chart")]
     public async Task ThenThePageShowsABarChart()
     {
-        await _forecastPage.AssertBarChart();
-    }
-
-    [When(@"the forecast is requested")]
-    public async Task WhenTheForecastIsRequested()
-    {
-        await _user.GotoAsync(_webFrontendUri, new PageGotoOptions{ Timeout = 0 });
+        await _forecastPage.AssertBarChartAsync();
     }
 }
